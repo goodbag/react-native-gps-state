@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import androidx.core.app.ActivityCompat;
+import android.util.Log;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
@@ -193,9 +194,16 @@ public class GPSStateModule extends ReactContextBaseJavaModule /*implements Acti
         return ActivityCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
+    int getCoarsePermission() {
+        return ActivityCompat.checkSelfPermission(getReactApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+    }
+
     boolean isPermissionGranted() {
         int permission = getPermission();
-        return permission == PackageManager.PERMISSION_GRANTED;
+        int coarsePermission = getCoarsePermission();
+        Log.d("GPSStateModule", "Location Permission: " + permission
+   + " and CoarsePermission: " + coarsePermission);
+        return (permission == PackageManager.PERMISSION_GRANTED || coarsePermission == PackageManager.PERMISSION_GRANTED);
     }
 
     boolean isGpsEnabled() {
